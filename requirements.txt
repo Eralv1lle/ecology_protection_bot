@@ -1,0 +1,9 @@
+aiogram==3.13.1
+aiohttp==3.10.5
+flask==3.0.3
+flask-cors==4.0.1
+peewee==3.17.6
+pillow==10.4.0
+python-dotenv==1.0.1
+requests==2.32.3
+gigachat==0.1.30

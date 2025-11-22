@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экологический мониторинг</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Экологический мониторинг</h1>
+            <nav>
+                <button id="allReportsBtn" class="active">Все отчёты</button>
+                <button id="filterBtn">Фильтры</button>
+                <button id="statsBtn">Статистика</button>
+                <a href="https://t.me/ecology_protection_bot?start=penis" target="_blank" class="btn-primary">📸 Загрузить загрязнение</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="map-container">
+                <div id="map"></div>
+                
+                <div id="filterPanel" class="filter-panel hidden">
+                    <h3>Фильтры</h3>
+                    <div class="filter-group">
+                        <label>Статус:</label>
+                        <select id="statusFilter">
+                            <option value="">Все</option>
+                            <option value="new">Новые</option>
+                            <option value="reviewing">На рассмотрении</option>
+                            <option value="in_progress">В работе</option>
+                            <option value="resolved">Решённые</option>
+                            <option value="rejected">Отклонённые</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Тип отходов:</label>
+                        <select id="wasteTypeFilter">
+                            <option value="">Все</option>
+                            <option value="пластик">Пластик</option>
+                            <option value="стекло">Стекло</option>
+                            <option value="металл">Металл</option>
+                            <option value="органика">Органика</option>
+                            <option value="строительный мусор">Строительный мусор</option>
+                            <option value="химические отходы">Химические отходы</option>
+                            <option value="смешанные">Смешанные</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Уровень опасности:</label>
+                        <select id="dangerFilter">
+                            <option value="">Все</option>
+                            <option value="низкий">Низкий</option>
+                            <option value="средний">Средний</option>
+                            <option value="высокий">Высокий</option>
+                            <option value="критический">Критический</option>
+                        </select>
+                    </div>
+                    <button id="applyFiltersBtn" class="btn-primary">Применить</button>
+                    <button id="resetFiltersBtn" class="btn-secondary">Сбросить</button>
+                </div>
+            </div>
+
+            <div id="reportCard" class="report-card hidden">
+                <button class="close-btn" id="closeCardBtn">×</button>
+                <div id="reportContent"></div>
+            </div>
+
+            <div id="statsPanel" class="stats-panel hidden">
+                <h2>📊 Статистика</h2>
+                <div id="statsContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Экологический мониторинг. Сделаем город чище вместе! 🌱</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/map.js"></script>
+</body>
+</html>

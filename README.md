@@ -1,1 +1,0 @@
-# ecology_protection_bot
