@@ -19,6 +19,8 @@ function init() {
     });
 
     map.geoObjects.add(objectManager);
+    map.setCenter([61.241778, 73.393032], 10);
+
 
     loadReports();
     setupEventListeners();
@@ -106,7 +108,7 @@ async function showReportCard(reportId) {
         </h3>
         <div class="report-info">
             <p><strong>👤 Пользователь:</strong> @${report.username || 'Неизвестно'}</p>
-            <p><strong>🗑 Тип отходов:</strong> ${report.waste_type}</p>
+            <p><strong>🗑️ Тип отходов:</strong> ${report.waste_type}</p>
             <p><strong>⚠️ Уровень опасности:</strong> <span class="danger-${report.danger_level}">${report.danger_level}</span></p>
             <p><strong>📍 Координаты:</strong> ${report.latitude}, ${report.longitude}</p>
             ${report.address ? `<p><strong>📌 Адрес:</strong> ${report.address}</p>` : ''}
