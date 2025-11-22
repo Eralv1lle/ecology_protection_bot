@@ -44,6 +44,17 @@ def cancel_keyboard():
     )
     return keyboard
 
+def cancel_admin_keyboard():
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="Отмена ❌")]
+        ],
+        resize_keyboard=True,
+        one_time_keyboard=True
+    )
+    return keyboard
+
+
 def report_status_keyboard(report_id):
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[

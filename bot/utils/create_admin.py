@@ -1,5 +1,6 @@
 import sys
 from database import initialize_db, Admin, db
+from peewee import DoesNotExist
 
 def create_admin(telegram_id, username=None):
     initialize_db()
@@ -9,14 +10,14 @@ def create_admin(telegram_id, username=None):
     try:
         admin = Admin.get(Admin.telegram_id == telegram_id)
         print(f"Администратор с ID {telegram_id} уже существует")
-    except Admin.DoesNotExist:
+    except DoesNotExist:
         admin = Admin.create(
             telegram_id=telegram_id,
             username=username,
             is_active=True
         )
         print(f"✅ Администратор создан: ID {telegram_id}, username: @{username or 'неизвестно'}")
-    
+
     db.close()
 
 if __name__ == '__main__':
