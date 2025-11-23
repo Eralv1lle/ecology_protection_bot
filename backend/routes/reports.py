@@ -97,13 +97,16 @@ def create_report():
         danger_level=data['danger_level']
     )
     
+    rating_points = data.get('rating_points', 10)
+    
     user.reports_count += 1
-    user.rating += 10
+    user.rating += rating_points
     user.save()
     
     return jsonify({
         'id': report.id,
-        'status': 'created'
+        'status': 'created',
+        'rating_points': rating_points
     }), 201
 
 @reports_bp.route('/api/reports/<int:report_id>', methods=['PUT'])

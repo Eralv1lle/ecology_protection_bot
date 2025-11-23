@@ -36,13 +36,10 @@ async def show_stats(message: Message):
     
     if not reports_text:
         reports_text = "Нет отчётов"
-
-    username = stats.get("username")
-    user = f"@{username}" if username else message.from_user.first_name
-
+    
     text = (
         f"📊 <b>Ваша статистика</b>\n\n"
-        f"👤 Пользователь: {user}\n"
+        f"👤 Пользователь: @{stats.get('username', 'Неизвестно')}\n"
         f"📝 Всего отчётов: {stats['reports_count']}\n"
         f"⭐️ Рейтинг: {stats['rating']}\n"
         f"🏆 Место в рейтинге: #{stats['rank']}\n\n"

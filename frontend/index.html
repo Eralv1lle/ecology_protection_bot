@@ -5,30 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Экологический мониторинг</title>
     <link rel="stylesheet" href="css/main.css">
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru_RU" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=6e86ab91-a82d-497e-900a-51204cd7c38b&lang=ru_RU" type="text/javascript"></script>
 </head>
 <body>
     <header>
         <div class="container">
             <h1>Экологический мониторинг</h1>
             <nav>
-                <button id="allReportsBtn" class="active">Все отчёты</button>
-                <button id="filterBtn">Фильтры</button>
+                <button id="aboutBtn">О нас</button>
                 <button id="statsBtn">Статистика</button>
-                <a href="https://t.me/ecology_protection_bot?start=penis" target="_blank" class="btn-primary">Загрузить загрязнение</a>
+                <a href="https://t.me/ecology_protection_bot?start=upload" target="_blank" class="btn-upload">Загрузить данные</a>
+                <button id="mapBtn" class="active">Карта</button>
+                <button id="projectBtn">О проекте</button>
             </nav>
         </div>
     </header>
 
-    <main>
-        <div class="container">
-            <div class="map-container">
-                <div id="map"></div>
-                
-                <div id="filterPanel" class="filter-panel hidden">
+    <div id="mainContent">
+        <div id="mapSection" class="section">
+            <div class="map-wrapper">
+                <div class="filter-panel">
                     <h3>Фильтры</h3>
                     <div class="filter-group">
-                        <label>Статус:</label>
+                        <label>Статус</label>
                         <select id="statusFilter">
                             <option value="">Все</option>
                             <option value="new">Новые</option>
@@ -39,44 +38,114 @@
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label>Тип отходов:</label>
+                        <label>Тип отходов</label>
                         <select id="wasteTypeFilter">
                             <option value="">Все</option>
-                            <option value="пластик">Пластик</option>
-                            <option value="стекло">Стекло</option>
-                            <option value="металл">Металл</option>
-                            <option value="органика">Органика</option>
-                            <option value="строительный мусор">Строительный мусор</option>
-                            <option value="химические отходы">Химические отходы</option>
-                            <option value="смешанные">Смешанные</option>
+                            <option value="Пластик">Пластик</option>
+                            <option value="Стекло">Стекло</option>
+                            <option value="Металл">Металл</option>
+                            <option value="Органика">Органика</option>
+                            <option value="Строительный мусор">Строительный мусор</option>
+                            <option value="Химические отходы">Химические отходы</option>
+                            <option value="Смешанные">Смешанные</option>
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label>Уровень опасности:</label>
+                        <label>Уровень опасности</label>
                         <select id="dangerFilter">
                             <option value="">Все</option>
-                            <option value="низкий">Низкий</option>
-                            <option value="средний">Средний</option>
-                            <option value="высокий">Высокий</option>
-                            <option value="критический">Критический</option>
+                            <option value="Низкий">Низкий</option>
+                            <option value="Средний">Средний</option>
+                            <option value="Высокий">Высокий</option>
+                            <option value="Критический">Критический</option>
                         </select>
                     </div>
-                    <button id="applyFiltersBtn" class="btn-primary">Применить</button>
-                    <button id="resetFiltersBtn" class="btn-secondary">Сбросить</button>
+                    <button id="applyFiltersBtn" class="btn-apply">Применить</button>
+                    <button id="resetFiltersBtn" class="btn-reset">Сбросить</button>
+                </div>
+                <div class="map-container">
+                    <div id="mapOverlay" class="map-overlay">
+                        <div class="map-click-hint">Нажмите для активации карты</div>
+                    </div>
+                    <div id="map" class="scroll-disabled"></div>
                 </div>
             </div>
+        </div>
 
-            <div id="reportCard" class="report-card hidden">
-                <button class="close-btn" id="closeCardBtn">×</button>
-                <div id="reportContent"></div>
-            </div>
-
-            <div id="statsPanel" class="stats-panel hidden">
+        <div id="statsSection" class="section hidden">
+            <div class="container">
                 <h2>📊 Статистика</h2>
                 <div id="statsContent"></div>
             </div>
         </div>
-    </main>
+
+        <div class="yellow-section">
+            <div class="container">
+                <h2>Очистим нашу планету от мусора вместе!</h2>
+                <div class="instruction-wrapper">
+                    <div class="instruction-box">
+                        <div class="trash-icon">🗑️</div>
+                        <div class="instruction-text">
+                            <h3>Как отметить на карте точку с мусором:</h3>
+                            <p><span class="step-number">1.</span> Найдите загрязненное <span class="highlight-red">место</span></p>
+                            <p><span class="step-number">2.</span> Сфотографируйте и отправьте в нашего <span class="highlight-blue">Телеграм-бота</span> 📷</p>
+                            <p><span class="step-number">3.</span> По необходимости напишите <span class="highlight-purple">геолокацию</span> 📍</p>
+                        </div>
+                    </div>
+                    <a href="https://t.me/YOUR_BOT_USERNAME?start=upload" target="_blank" class="telegram-btn">
+                        <span class="telegram-icon">✈️</span>
+                        Присоединись к улучшению экосистемы!
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="blue-section">
+            <div class="container">
+                <h2>Ваш взгляд меняет <span class="highlight-blue-text">мир</span>!</h2>
+                <div class="content-wrapper">
+                    <div class="pin-icon">📍</div>
+                    <div class="message-box">
+                        <p>Один снимок может рассказать о проблеме. Тысячи снимков — решить её. Наш проект объединяет людей, которые хотят видеть планету чище. Просто сфотографируйте загрязнение и отправьте боту. Мы позаботимся обо всём остальном, чтобы ваша помощь была замечена.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-section">
+            <div class="container">
+                <h2>Наша команда - <span class="highlight-green">космиктех</span></h2>
+                <div class="team-content">
+                    <div class="team-photo">
+                        <img src="team.jpg" alt="Команда космиктех" onerror="this.style.display='none'">
+                    </div>
+                    <div class="team-info">
+                        <div class="team-members">
+                            <h3>Проектом занимались</h3>
+                            <p>Артюшкин Илья Олегович, Зиннаттулин Тимур Ахунович, Кирилюк Илья Денисович и Иоскевич Владимир Александрович.</p>
+                        </div>
+                        <div class="team-presentation">
+                            <img src="team2.jpg" alt="Команда" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                </div>
+                <div class="team-description">
+                    <p>Нашу команду связывает интерес к программированию и стремление развиваться в этой области, а так же стремление помогать окружающей среде и желание сделать мир чуточку лучше</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="reportCard" class="report-card hidden">
+        <button class="close-btn" id="closeCardBtn">×</button>
+        <div id="reportContent"></div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Экологический мониторинг. Сделаем город чище вместе! 🌱</p>
+        </div>
+    </footer>
 
     <script src="js/api.js"></script>
     <script src="js/map.js"></script>

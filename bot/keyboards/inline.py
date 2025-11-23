@@ -14,7 +14,7 @@ def main_menu_keyboard():
 def admin_menu_keyboard():
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="📋 Новые отчёты"), KeyboardButton(text="🔍 Все отчёты")],
+            [KeyboardButton(text="📋 Новые отчёты"), KeyboardButton(text="🔍 Нерешённые отчёты")],
             [KeyboardButton(text="📊 Статистика"), KeyboardButton(text="👥 Пользователи")],
             [KeyboardButton(text="🔙 Выйти из админки")]
         ],
@@ -53,7 +53,6 @@ def cancel_admin_keyboard():
         one_time_keyboard=True
     )
     return keyboard
-
 
 def report_status_keyboard(report_id):
     keyboard = InlineKeyboardMarkup(

@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 from bot.handlers import start, stats, photo, admin
 from bot.middlewares import UserMiddleware
-
 from database import initialize_db
 
 load_dotenv()
@@ -17,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 async def main():
     initialize_db()
-
+    
     bot_token = os.getenv('BOT_TOKEN')
     if not bot_token:
         logger.error("BOT_TOKEN not found in environment variables")
@@ -38,7 +37,4 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("бот остановлен")
+    asyncio.run(main())
