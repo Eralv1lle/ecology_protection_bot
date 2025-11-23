@@ -40,3 +40,14 @@ class Admin(BaseModel):
     username = CharField(null=True)
     is_active = BooleanField(default=True)
     created_at = DateTimeField(default=datetime.now)
+
+
+class Review(BaseModel):
+    user = ForeignKeyField(User, backref='reviews')
+    text = TextField()
+    rating = IntegerField(default=5)
+    is_approved = BooleanField(default=True)
+    created_at = DateTimeField(default=datetime.now)
+
+    class Meta:
+        table_name = 'reviews'

@@ -10,7 +10,7 @@ import math
 
 from bot.keyboards import admin_menu_keyboard, main_menu_keyboard, cancel_keyboard, cancel_admin_keyboard
 from bot.utils import get_reports, update_report_status, delete_report
-from database import Admin, User, db
+from database import Admin, User, db, Review
 
 
 router = Router()
@@ -141,6 +141,176 @@ async def show_new_reports(message: Message):
         parse_mode='HTML',
         reply_markup=keyboard
     )
+
+@router.message(F.text == "💬 Отзывы")
+async def show_reviews_list(message: Message):
+    if not is_admin(message.from_user.id):
+        await message.answer("❌ У вас нет прав администратора")
+        return
+
+    db.connect(reuse_if_open=True)
+    reviews = list(Review.select().order_by(Review.created_at.desc()))
+    db.close()
+
+    if not reviews:
+        await message.answer("💬 Нет отзывов")
+        return
+
+    total_pages = math.ceil(len(reviews) / ITEMS_PER_PAGE)
+
+    keyboard = create_pagination_keyboard(
+        reviews,
+        0,
+        total_pages,
+        "review",
+        lambda r: f"⭐ @{r.user.username or 'Неизвестно'} - {r.text[:30]}..."
+    )
+
+    await message.answer(
+        f"💬 <b>Отзывы</b>\n\n"
+        f"Всего: {len(reviews)}\n"
+        f"Выберите отзыв:",
+        parse_mode='HTML',
+        reply_markup=keyboard
+    )
+
+
+@router.callback_query(F.data.startswith("review_page_"))
+async def reviews_page(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id):
+        await callback.answer("❌ У вас нет прав администратора", show_alert=True)
+        return
+
+    page = int(callback.data.split("_")[-1])
+
+    db.connect(reuse_if_open=True)
+    reviews = list(Review.select().order_by(Review.created_at.desc()))
+    db.close()
+
+    total_pages = math.ceil(len(reviews) / ITEMS_PER_PAGE)
+
+    keyboard = create_pagination_keyboard(
+        reviews,
+        page,
+        total_pages,
+        "review",
+        lambda r: f"⭐ @{r.user.username or 'Неизвестно'} - {r.text[:30]}..."
+    )
+
+    await callback.message.edit_text(
+        f"💬 <b>Отзывы</b>\n\n"
+        f"Всего: {len(reviews)}\n"
+        f"Страница {page + 1}/{total_pages}\n"
+        f"Выберите отзыв:",
+        parse_mode='HTML',
+        reply_markup=keyboard
+    )
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("review_") & ~F.data.contains("page"))
+async def show_review_detail(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id):
+        await callback.answer("❌ У вас нет прав администратора", show_alert=True)
+        return
+
+    review_id = int(callback.data.split("_")[-1])
+
+    db.connect(reuse_if_open=True)
+    try:
+        review = Review.get_by_id(review_id)
+    except:
+        await callback.answer("❌ Отзыв не найден", show_alert=True)
+        db.close()
+        return
+
+    text = (
+        f"⭐ <b>Отзыв #{review.id}</b>\n\n"
+        f"👤 Пользователь: @{review.user.username or 'Неизвестно'}\n"
+        f"📝 Текст:\n{review.text}\n\n"
+        f"📅 Дата: {review.created_at.strftime('%d.%m.%Y %H:%M')}"
+    )
+
+    db.close()
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="🗑 Удалить отзыв", callback_data=f"delete_review_{review_id}")],
+            [InlineKeyboardButton(text="🔙 Назад к списку", callback_data="back_to_reviews")]
+        ]
+    )
+
+    await callback.message.edit_text(
+        text,
+        parse_mode='HTML',
+        reply_markup=keyboard
+    )
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("delete_review_"))
+async def delete_review_handler(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id):
+        await callback.answer("❌ У вас нет прав администратора", show_alert=True)
+        return
+
+    review_id = int(callback.data.split("_")[-1])
+
+    import aiohttp
+    backend_url = os.getenv('BACKEND_URL', 'http://localhost:5000')
+
+    async with aiohttp.ClientSession() as session:
+        async with session.delete(f'{backend_url}/api/reviews/{review_id}') as response:
+            if response.status == 200:
+                await callback.answer("🗑 Отзыв удалён", show_alert=True)
+
+                try:
+                    await callback.message.delete()
+                except:
+                    pass
+            else:
+                await callback.answer("❌ Ошибка удаления", show_alert=True)
+
+
+@router.callback_query(F.data == "back_to_reviews")
+async def back_to_reviews_list(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id):
+        await callback.answer("❌ У вас нет прав администратора", show_alert=True)
+        return
+
+    db.connect(reuse_if_open=True)
+    reviews = list(Review.select().order_by(Review.created_at.desc()))
+    db.close()
+
+    if not reviews:
+        await callback.message.answer("💬 Нет отзывов")
+        await callback.answer()
+        return
+
+    total_pages = math.ceil(len(reviews) / ITEMS_PER_PAGE)
+
+    keyboard = create_pagination_keyboard(
+        reviews,
+        0,
+        total_pages,
+        "review",
+        lambda r: f"⭐ @{r.user.username or 'Неизвестно'} - {r.text[:30]}..."
+    )
+
+    await callback.message.answer(
+        f"💬 <b>Отзывы</b>\n\n"
+        f"Всего: {len(reviews)}\n"
+        f"Выберите отзыв:",
+        parse_mode='HTML',
+        reply_markup=keyboard
+    )
+
+    try:
+        await callback.message.delete()
+    except:
+        pass
+
+    await callback.answer()
 
 @router.callback_query(F.data.startswith("new_report_page_"))
 async def new_reports_page(callback: CallbackQuery):

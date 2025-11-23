@@ -1,10 +1,11 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 
 def main_menu_keyboard():
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="📸 Отправить отчёт")],
-            [KeyboardButton(text="📊 Моя статистика"), KeyboardButton(text="🗺 Карта загрязнений")],
+            [KeyboardButton(text="📸 Отправить отчёт"), KeyboardButton(text="📊 Моя статистика")],
+            [KeyboardButton(text="🗺 Карта загрязнений"), KeyboardButton(text="⭐ Оставить отзыв")],
+            [KeyboardButton(text="📘 FAQ", web_app=WebAppInfo(url="https://teletype.in/@pitonovich/dQJGQzFT6n_"))],
             [KeyboardButton(text="ℹ️ Помощь")]
         ],
         resize_keyboard=True
@@ -16,6 +17,7 @@ def admin_menu_keyboard():
         keyboard=[
             [KeyboardButton(text="📋 Новые отчёты"), KeyboardButton(text="🔍 Нерешённые отчёты")],
             [KeyboardButton(text="📊 Статистика"), KeyboardButton(text="👥 Пользователи")],
+            [KeyboardButton(text="💬 Отзывы")],
             [KeyboardButton(text="🔙 Выйти из админки")]
         ],
         resize_keyboard=True

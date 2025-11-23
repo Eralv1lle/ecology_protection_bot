@@ -3,7 +3,7 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from database import initialize_db
-from backend.routes import reports_bp, stats_bp
+from backend.routes import reports_bp, stats_bp, reviews_bp
 
 load_dotenv()
 
@@ -13,6 +13,7 @@ CORS(app)
 
 app.register_blueprint(reports_bp)
 app.register_blueprint(stats_bp)
+app.register_blueprint(reviews_bp)
 
 @app.route('/')
 def index():
