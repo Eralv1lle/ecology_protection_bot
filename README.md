@@ -1,5 +1,3 @@
-### 1. `ecology_protection_bot`
-
 # 🌱 AI-система экологического мониторинга
 
 Призёр хакатона **Digital Challenge**.
